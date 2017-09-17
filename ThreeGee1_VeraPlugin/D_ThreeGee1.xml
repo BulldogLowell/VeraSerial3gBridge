@@ -1,0 +1,31 @@
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+    <specVersion>
+        <major>1</major>
+        <minor>0</minor>
+    </specVersion>
+    <device>
+        <deviceType>urn:schemas-konektedplay-com:device:ThreeGee:1</deviceType>
+        <staticJson>D_ThreeGee1.json</staticJson>
+        <friendlyName>ThreeGee Gateway</friendlyName>
+        <serviceList>
+            <service>
+                <serviceType>urn:schemas-konektedplay-com:service:ThreeGee:1</serviceType>
+                <serviceId>urn:konektedplay-com:serviceId:ThreeGee1</serviceId>
+                <SCPDURL>S_ThreeGee1.xml</SCPDURL>
+            </service>
+            <service>
+                <serviceType>urn:schemas-micasaverde-com:service:SecuritySensor:1</serviceType>
+                <serviceId>urn:micasaverde-com:serviceId:SecuritySensor1</serviceId>
+                <SCPDURL>S_SecuritySensor1.xml</SCPDURL>
+            </service>
+            <service>
+            	<serviceType>urn:micasaverde-com:serviceId:HaDevice:1</serviceType>
+            	<serviceId>urn:micasaverde-com:serviceId:HaDevice1</serviceId>
+                <SCPDURL>S_HaDevice1.xml</SCPDURL>
+        	</service>
+        </serviceList>
+        <implementationList>
+            <implementationFile>I_ThreeGee1.xml</implementationFile>
+        </implementationList>
+    </device>
+</root>
