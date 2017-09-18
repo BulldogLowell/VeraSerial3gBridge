@@ -36,8 +36,17 @@ Depending on your unit, the USB connection location may vary.
 
 ### 9. Install the Vera Plugin
 Select **APPS** -> **Develop Apps** -> **Luup Files**
-Drag and drop all 5 ThreeGee1 files into the destination directory for plugins
+Drag and drop all 5 ThreeGee1 files into the destination directory for plugins and Wait for files to upload.
 
 ![Plugin Install](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/LuupFiles.png)
 
-Wait for files to upload and re-Boot your Vera Device.
+### 10. Create a ThreeGee1 Device
+Select **APPS** -> **Develop Apps** -> **Create Device** enter the device's XML file name **D_ThreeGee1.xml** and select **Create device**.
+
+![Create Device]()
+
+Re-Boot your Vera Device; this process takes about 5 minutes.
+
+### 10. Configure the Serial Device
+Select **APPS** -> **Develop Apps** -> **Luup Files**
+
