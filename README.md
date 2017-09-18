@@ -69,5 +69,5 @@ If **Armed** Vera will push messages to your 3G gateway, if **Disarmed** message
 ***
 ### 2. Configure your settings
 You can set the 
-  **GateWay Timeout:** The time (minutes) that the gateway will send an alert if Vera stops communicating.
+  * **GateWay Timeout:** The time (minutes) that the gateway will send an alert if Vera stops communicating.
 
