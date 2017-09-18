@@ -70,4 +70,7 @@ If **Armed** Vera will push messages to your 3G gateway, if **Disarmed** message
 ### 2. Configure your settings
 You can set the 
   * **GateWay Timeout:** The time (minutes) that the gateway will send an alert if Vera stops communicating.
+  * **Ping Frequency:** The time (seconds) that the gateway will send a ping to the gateway and to the internet.
+  * **Ping Timeout:** The time (seconds) that Vera, in the absense of a return ping from the Gateway will display as "Tripped".  It is also the timeout for returning a successful ping from the internet
+  * **GateWay Timeout:** The time (minutes) that the gateway will send an alert if Vera stops communicating.
 
