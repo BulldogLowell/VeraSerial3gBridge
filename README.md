@@ -83,4 +83,6 @@ Send a message by inputting text (32 char max) into the appropriate text box and
 ***
 ## Some Operating Notes:
   * Messages take several seconds to send as the Electron is awoken from sleep and re-connects to the Mobile Network
-  * Messages will buffer (up to 10) so 3G messages should be limited to the most important if the internet is disconnected/
+  * Messages will buffer (up to 10) so 3G messages should be limited to the most important if the internet is disconnected.  
+  * You can determine the state of the IP Ping checking the **InternetPing** variable ***ServiceID**:urn:konektedplay-com:serviceId:ThreeGee1*, "0" is success "1" is failed.
+  * Device will report **Tripped** **ServiceID**urn:micasaverde-com:serviceId:SecuritySensor1* "1" = Tripped, "0" = Not Tripped and have Vera send a message that the Gateway is down.
