@@ -13,9 +13,16 @@ Follow the [instructions here](https://login.particle.io/signup?redirect=https%3
 ### 3. Flash your Particle Electron
 You can select [DFU flash](https://docs.particle.io/faq/particle-tools/installing-dfu-util/electron/) (no Cellular Data Used) from the command line or do it Over The Air (OTA flash will use cellular data).
 ### 4. Create a Particle Webhook
-Login to the Particle Console and select [Integrations](https://console.particle.io/integrations).  Create a Webhook identical to this:
+Login to the Particle Console and select [Integrations](https://console.particle.io/integrations).  Create and save Webhook identical to this:
+
 ![First Page](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/WebHook1.png)
 ![Second Page](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/WebHook2.png)
+
+### 5. Test Your WebHook
+Press the Test Button to make sure your Integration is working:
+
+![Test Page](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/WebHookTest.png)
+
 ### 9. Wire Up Your Devices:
 
 ![FritzingDiagram](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/FritzingDiagram.png)
