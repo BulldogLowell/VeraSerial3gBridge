@@ -38,4 +38,6 @@ Depending on your unit, the USB connection location may vary.
 Select **APPS** -> **Develop Apps** -> **Luup Files**
 Drag and drop all 5 ThreeGee1 files into the destination directory for plugins
 
-[Plugin Install]()
+[Plugin Install](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/LuupFiles.png)
+
+Wait for files to upload and re-Boot your Vera Device.
