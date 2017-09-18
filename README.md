@@ -90,4 +90,4 @@ Send a message by inputting text (32 char max) into the appropriate text box and
   * Device will report **Tripped** variable **ServiceID:** *urn:micasaverde-com:serviceId:SecuritySensor1* "1" = Tripped, "0" = Not Tripped.  You can have Vera send a message that the Gateway is down (in this case, gateway stopped functioning but Internet is still connected).
   ***
 ## Coming Soon:
-  * Automatic Power Cycling of Vera (relay control) if inactive foe a define period.
+  * Automatic Power Cycling of Vera (relay control) if inactive for a defined period.
