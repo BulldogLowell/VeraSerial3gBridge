@@ -7,9 +7,9 @@
 
 ## Instructions
 ### 1. Create a Pushover Account
-Follow the [instructions here to create a Pushover Account](https://pushover.net/signup), set up your recieving devices and take careful note of your API key.
+Follow the [instructions here](https://pushover.net/signup) to create a Pushover Account, set up your recieving devices and take careful note of your API key.
 ### 2. Create a Particle Account
-Follow the [instructions here](https://login.particle.io/signup?redirect=https%3A//www.particle.io/) to create a Particle Account. Familiarize yourself with the Particle device.  Learn how to perform a Flash via the [Particle Web IDE]().
+Follow the [instructions here](https://login.particle.io/signup?redirect=https%3A//www.particle.io/) to create a Particle Account. Familiarize yourself with the Particle device.  Learn how to perform a Flash via the [Particle Web IDE](https://build.particle.io).
 ### 3. Flash your Particle Electron
 You can select [DFU flash](https://docs.particle.io/faq/particle-tools/installing-dfu-util/electron/) (no Cellular Data Used) from the command line or do it Over The Air (OTA flash will use cellular data).
 ### 4. Create a Particle Webhook
