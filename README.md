@@ -74,7 +74,7 @@ The Control Panel appears with the default (preferred) settings showing as:
 
 You can set the 
   * **GateWay Timeout:** The time (minutes) that the gateway will send an alert if Vera stops communicating.
-  * **Ping Frequency:** The time (seconds) that the gateway will send a ping to the gateway and to the internet.
+  * **Ping Frequency:** The time (seconds) that the Vera will send a ping to the gateway and to the internet.  Vera looks for a response from both the gateway and the internet.
   * **Ping Timeout:** The time (seconds) that Vera, in the absense of a return ping from the Gateway will display as "Tripped".  It is also the timeout for returning a successful ping from the internet
   * **IP or Domain:** The IP address or domain of the external server to return a Ping.  Default is *google.com*.
   * **IP Notify Retries:** The number of times that the gateway will re-send an alert if Vera stops communicating to the internet.
