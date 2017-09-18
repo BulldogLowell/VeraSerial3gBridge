@@ -35,5 +35,7 @@ You can wire up the device like this (or optionaly power the Electron by its USB
 Depending on your unit, the USB connection location may vary.
 
 ### 9. Install the Vera Plugin
-Select *APPS* -> *Develop Apps* -> *Luup Files*
-Drag and drop all 5 ThreeGee1 files into the 
+Select **APPS** -> **Develop Apps** -> **Luup Files**
+Drag and drop all 5 ThreeGee1 files into the destination directory for plugins
+
+[Plugin Install]()
