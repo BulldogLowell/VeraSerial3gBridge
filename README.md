@@ -5,7 +5,7 @@
 
 #### Uses [Particle Electron](https://store.particle.io/?utm_source=ADWORDS&utm_medium=CPC&utm_campaign=Branded&ads_cmpid=678296808&ads_adid=34991192352&ads_matchtype=b&ads_network=g&ads_creative=191119814318&utm_term=particle%20electron&ads_targetid=kwd-261025688856&utm_source=adwords&utm_medium=ppc&ttv=2&gclid=CjwKCAjw3f3NBRBPEiwAiiHxGBDCyxr_WXZ1caIwNNZXcDzRbsz9a3IZqZVRQ_vidghuTnk1t04eQhoCBKwQAvD_BwE "particle.io") to communicate over 3G wireless services and an [Arduino Nano](https://store.arduino.cc/usa/arduino-nano "arduino.cc") to bridge the serial communication and buffer messages while the Electron sleeps.  This sleep method is used in order to keep the data costs to a minimum.  Using the [Particle.io](https://www.particle.io "particle.io") services, the montly cost to operate is less than $3.00 per month.
 
-## Instructions
+## Instructions:
 ### 1. Create a Pushover Account
 Follow the [instructions here](https://pushover.net/signup) to create a Pushover Account, set up your recieving devices and take careful note of your API key.
 ***
@@ -48,8 +48,10 @@ Select **APPS** -> **Develop Apps** -> **Create Device** enter the device's XML 
 
 ![Create Device](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/CreateDevice.png)
 
-Re-Boot your Vera Device; this process takes about 5 minutes.
+Re-Boot your Vera Device; this process takes about 5 minutes.  You should then see your device with the following message:
+
+![Vera Serial Error]()
 ***
-### 10. Configure the Serial Device
+### 11. Configure the Serial Device
 Select **APPS** -> **Develop Apps** -> **Luup Files**
 
