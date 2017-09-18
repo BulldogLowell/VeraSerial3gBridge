@@ -50,8 +50,13 @@ Select **APPS** -> **Develop Apps** -> **Create Device** enter the device's XML 
 
 Re-Boot your Vera Device; this process takes about 5 minutes.  You should then see your device with the following message:
 
-![Vera Serial Error]()
+![Vera Serial Error](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/DeviceSerialError.png)
 ***
 ### 11. Configure the Serial Device
-Select **APPS** -> **Develop Apps** -> **Luup Files**
+Select **APPS** -> **Develop Apps** -> **Serial Port Configuration**
+You should see your FTDI (Serial) connected Nano on the list of Serial Devices.  If not, wait a few minutes and try again, as per the on-screen instructions.
+Select the new ThreeGee Gateway device in the drop-down and set the Baud Rate to 115200, Data Bits to 8, Stop Bits to 1 and Parity to None as in this image:
+
+![Serial Setup](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/SerialSetup.png)
+***
 
