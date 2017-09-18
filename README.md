@@ -76,7 +76,7 @@ You can set the
   * **GateWay Timeout:** The time (minutes) that the gateway will send an alert if Vera stops communicating.
   * **Ping Frequency:** The time (seconds) that the gateway will send a ping to the gateway and to the internet.
   * **Ping Timeout:** The time (seconds) that Vera, in the absense of a return ping from the Gateway will display as "Tripped".  It is also the timeout for returning a successful ping from the internet
-  * **IP or Domain:** The IP address or domain of the external server to return a Ping;default is *google.com*.
+  * **IP or Domain:** The IP address or domain of the external server to return a Ping.  Default is *google.com*.
   * **IP Notify Retries:** The number of times that the gateway will re-send an alert if Vera stops communicating to the internet.
 
 Send a message by inputting text (32 char max) into the appropriate text box and press **Send**.
