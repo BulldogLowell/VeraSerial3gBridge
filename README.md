@@ -80,6 +80,8 @@ You can set the
   * **IP Notify Retries:** The number of times that the gateway will re-send an alert if Vera stops communicating to the internet.
 
 Send a message by inputting text (32 char max) into the appropriate text box and press **Send**.
+
+![ThreeGee Rocks](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/ThreeGeeRocks.png)
 ***
 ## Some Operating Notes:
   * Messages take several seconds to send as the Electron is awoken from sleep and re-connects to the Mobile Network.
