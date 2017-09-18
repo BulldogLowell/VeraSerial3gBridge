@@ -43,7 +43,7 @@ Drag and drop all 5 ThreeGee1 files into the destination directory for plugins a
 ### 10. Create a ThreeGee1 Device
 Select **APPS** -> **Develop Apps** -> **Create Device** enter the device's XML file name **D_ThreeGee1.xml** and select **Create device**.
 
-![Create Device]()
+![Create Device](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/CreateDevice.png)
 
 Re-Boot your Vera Device; this process takes about 5 minutes.
 
