@@ -8,6 +8,11 @@
 ## Instructions
 ### 1. Create a Particle Account
 Follow the [instructions here](https://login.particle.io/signup?redirect=https%3A//www.particle.io/) to create a Particle Account.
-### 2. Wire Up Your Devices:
+### 2. Create a Pushover Account
+Follow the [instructions here to create a Pushover Account](https://pushover.net/signup), set up your recieving devices and take careful note of your API key.
+### 3. Create a Particle Webhook
+Login to the Particle Console and select [Integrations](https://console.particle.io/integrations).  Create a Webhook identical to this:
+
+### 9. Wire Up Your Devices:
 
 ![FritzingDiagram](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/FritzingDiagram.png)
