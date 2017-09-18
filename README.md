@@ -23,6 +23,17 @@ Press the Test Button to make sure your Integration is working:
 
 ![Test Page](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/WebHookTest.png)
 
-### 9. Wire Up Your Devices:
+### 6. Flash your Arduino Nano
+Using the Arduino IDE, be sure to select Nano as the target device and flash the GitHub Code to your Nano
+
+### 7. Wire Up Your Devices:
+You can wire up the device like this (or optionaly power the Electron by its USB connection... better).
 
 ![FritzingDiagram](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/FritzingDiagram.png)
+
+### 8. Attach the Nano's USB cable to your Vera's on-board Serial USB connection.
+Depending on your unit, the USB connection location may vary.
+
+### 9. Install the Vera Plugin
+Select *APPS* -> *Develop Apps* -> *Luup Files*
+Drag and drop all 5 ThreeGee1 files into the 
