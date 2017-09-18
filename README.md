@@ -64,8 +64,10 @@ Select the new ThreeGee Gateway device in the drop-down and set the Baud Rate to
 ## Operating Instructions:
 ### 1. Arm your device
 If **Armed** Vera will push messages to your 3G gateway, if **Disarmed** messages will not be sent.
-
-![MainPanel]()
+*The main panel displays messages as it Pings the gateway, Internet and sends a 3G message.*
+![MainPanel](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/VeraMainPanel.png)
 ***
-### 2. 
+### 2. Configure your settings
+You can set the 
+  **GateWay Timeout:** The time (minutes) that the gateway will send an alert if Vera stops communicating.
 
