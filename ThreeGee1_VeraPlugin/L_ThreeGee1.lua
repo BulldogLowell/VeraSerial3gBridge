@@ -237,13 +237,12 @@ end
 function setRouterDeviceID(device, routerID)
   assert(device ~= nil)
   luup.log("ThreeGee1: Setting Router Target Device to: "..routerID)
-  --local router = tonumber(routerID)
-  if (luup.variable.get(SWITCHPOWER_SID, "Target", routerID) == nil) then
-    luup.log("ThreeGee1: Device"..routerID.."is not a Switch")
-    --luup.variable_set(THREEGEE_SID, "RouterDeviceID", 0, device)
+  --if (luup.variable.get(SWITCHPOWER_SID, "Target", routerID) == nil) then
+  if (luup.device_supports_service(SWITCHPOWER_SID, routerID)) then
+    luup.log("ThreeGee1: Setting RouterDeviceID to:"..routerID)
+    luup.variable_set(THREEGEE_SID, "RouterDeviceID", tonumber(routerID), device)
   else
-    luup.log("ThreeGee1: Setting RouterDeviceID to"..routerID)
-    luup.variable_set(THREEGEE_SID, "RouterDeviceID", routerID, device)
+    luup.log("ThreeGee1: Device"..routerID.."is not a Switch")
   end
 end
 
