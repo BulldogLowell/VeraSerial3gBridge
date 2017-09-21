@@ -233,10 +233,10 @@ function setIpRepeatTries(device, tries)
   internetLostRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
 end
 
-function setRouterDeviceID(device, id)
+function setRouterDeviceID(device, deviceID)
   assert(device ~= nil)
-  luup.log("ThreeGee1: Setting IP Repeat Tries to:"..id)
-  luup.variable_set(THREEGEE_SID, "RouterDeviceID", id, device)
+  luup.log("ThreeGee1: Setting IP Repeat Tries to:"..deviceID)
+  luup.variable_set(THREEGEE_SID, "RouterDeviceID", deviceID, device)
 end
 
 function getMax(pingCount, arraySize)
