@@ -234,14 +234,15 @@ function setIpRepeatTries(device, tries)
   internetLostRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
 end
 
-function setRouterDeviceID(device, deviceID)
+function setRouterDeviceID(device, routerID)
   assert(device ~= nil)
-  luup.log("ThreeGee1: Setting IP Repeat Tries to:"..deviceID)
-  if (luup.variable.get(SWITCHPOWER_SID, "Target", deviceID) == nil) then
-    luup.log("ThreeGee1: Device"..deviceID.."is not a Switch")
+  luup.log("ThreeGee1: Setting Router Target Device to: "..routerID)
+  local router = tonumber(routerID)
+  if (luup.variable.get(SWITCHPOWER_SID, "Target", router) == nil) then
+    luup.log("ThreeGee1: Device"..routerID.."is not a Switch")
     --luup.variable_set(THREEGEE_SID, "RouterDeviceID", 0, device)
   else
-    luup.variable_set(SWITCHPOWER_SID, "RouterDeviceID", deviceID, device)
+    luup.variable_set(THREEGEE_SID, "RouterDeviceID", router, device)
   end
 end
 
