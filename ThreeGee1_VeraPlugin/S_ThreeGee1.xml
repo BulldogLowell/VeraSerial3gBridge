@@ -40,7 +40,7 @@
 			<name>IpRepeatTries</name>
 			<datatype>number</datatype>
 		</stateVariable>
-		<statevariable>
+		<stateVariable>
 			<name>RouterDeviceID</name>
 			<datatype>number</datatype>
 		</stateVariable>
