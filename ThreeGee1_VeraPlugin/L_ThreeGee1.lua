@@ -70,6 +70,11 @@ function initializeVariables(device)
     luup.variable_set(THREEGEE_SID, "IpRepeatTries", 0, device)
   end
 
+  if (luup.variable_get(THREEGEE_SID, "RouterDeviceID", device) == nil) then
+    luup.log("ThreeGee1: initializing RouterDeviceID")
+    luup.variable_set(THREEGEE_SID, "RouterDeviceID", 0, device)
+  end
+
   local pingCount = math.floor(luup.variable_get(THREEGEE_SID, "PingTimeout", device) / luup.variable_get(THREEGEE_SID, "PingFrequency", device)) or 1
   if pingCount > MAX_ARRAY_SIZE then
     pingCount = MAX_ARRAY_SIZE
@@ -226,6 +231,12 @@ function setIpRepeatTries(device, tries)
   luup.log("ThreeGee1: Setting IP Repeat Tries to:"..tries)
   luup.variable_set(THREEGEE_SID, "IpRepeatTries", tries, device)
   internetLostRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
+end
+
+function setRouterDeviceID(device, id)
+  assert(device ~= nil)
+  luup.log("ThreeGee1: Setting IP Repeat Tries to:"..id)
+  luup.variable_set(THREEGEE_SID, "RouterDeviceID", id, device)
 end
 
 function getMax(pingCount, arraySize)

@@ -478,6 +478,61 @@
                   ]
                }
             },
+            {
+               "ControlGroup":2,
+               "ControlType":"line_break"
+            },
+            {
+               "ControlGroup":"2",
+               "ControlHeader":"1",
+               "ControlType":"label",
+               "Label":{
+                  "lang_tag":"label_router_device",
+                  "text":"Router Device ID:"
+               },
+               "Display":{
+                  "Top":250,
+                  "Left":50,
+                  "Width":100
+               }
+            },
+            {
+               "ControlGroup":"2",
+               "ControlPair":"1",
+               "ControlType":"input",
+               "ID":"RouterDeviceID",
+               "Display":{
+                  "Top":250,
+                  "Left":165,
+                  "Width":80,
+                  "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
+                  "Variable":"RouterDeviceID"
+               }
+            },
+            {
+               "ControlGroup":"2",
+               "ControlPair":"1",
+               "ControlType":"button",
+               "Label":{
+                  "lang_tag":"button_router_device",
+                  "text":"Update"
+               },
+               "Display":{
+                  "Top":250,
+                  "Left":270,
+                  "Width":50
+               },
+               "Command":{
+                  "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
+                  "Action":"SetRouterDeviceID",
+                  "Parameters":[
+                     {
+                        "Name":"RouterDeviceID",
+                        "ID":"RouterDeviceID"
+                     }
+                  ]
+               }
+            }
          ]
       },
       {

@@ -119,5 +119,16 @@
 			</argumentList>
 		</action>
 
+		<action>
+			<name>SetRouterDeviceID</name>
+			<argumentList>
+				<argument>
+					<name>RouterDeviceID</name>
+					<direction>in</direction>
+					<relatedStateVariable>number</relatedStateVariable>
+				</argument>
+			</argumentList>
+		</action>
+
 	</actionList>
 </scpd>

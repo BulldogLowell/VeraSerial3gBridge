@@ -139,5 +139,16 @@
             return true
         </run>
     </action>
+		<action>
+        <serviceId>urn:konektedplay-com:serviceId:ThreeGee1</serviceId>
+        <name>SetRouterDeviceID</name>
+        <run>
+            luup.log("ThreeGee1: Running SetRouterDeviceID")
+            local deviceID = tonumber(lul_settings.RouterDeviceID) or 0
+            luup.log("ThreeGee1: Router Device ID:"..deviceID)
+            MyDevice.setRouterDeviceID(lul_device, deviceID)
+            return true
+        </run>
+    </action>
 	</actionList>
 </implementation>
