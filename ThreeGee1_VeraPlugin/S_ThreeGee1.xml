@@ -40,6 +40,10 @@
 			<name>IpRepeatTries</name>
 			<datatype>number</datatype>
 		</stateVariable>
+		<statevariable>
+			<name>RouterDeviceID</name>
+			<datatype>number</datatype>
+		</stateVariable>
 	</serviceStateTable>
 	<actionList>
 		<action>
