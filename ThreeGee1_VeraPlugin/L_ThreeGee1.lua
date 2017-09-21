@@ -1,5 +1,6 @@
 module("L_ThreeGee1", package.seeall)
 
+local SWITCHPOWER_SID = "urn:upnp-org:serviceId:SwitchPower1"
 local SECURITY_SENSOR_SID = "urn:micasaverde-com:serviceId:SecuritySensor1"
 local THREEGEE_SID = "urn:konektedplay-com:serviceId:ThreeGee1"
 local THREEGEE_TYPE = "urn:schemas-konektedplay-com:device:ThreeGee:1"
@@ -236,7 +237,12 @@ end
 function setRouterDeviceID(device, deviceID)
   assert(device ~= nil)
   luup.log("ThreeGee1: Setting IP Repeat Tries to:"..deviceID)
-  luup.variable_set(THREEGEE_SID, "RouterDeviceID", deviceID, device)
+  if (luup.variable.get(SWITCHPOWER_SID, "Target", deviceID) == nil) then
+    luup.log("ThreeGee1: Device"..deviceID.."is not a Switch")
+    --luup.variable_set(THREEGEE_SID, "RouterDeviceID", 0, device)
+  else
+    luup.variable_set(SWITCHPOWER_SID, "RouterDeviceID", deviceID, device)
+  end
 end
 
 function getMax(pingCount, arraySize)
