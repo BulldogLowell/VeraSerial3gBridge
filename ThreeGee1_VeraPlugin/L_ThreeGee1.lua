@@ -170,7 +170,26 @@ function ipCheckAndNotify(device)
     internetLostRetries = tonumber(internetLostRetries) - 1
     lastIpReminderTime = os.time()
     threeGeeNotify(device, "INTERNET CXN LOST")
+    --[[
+    local routerDeviceNumber = tonumber(luup.variable_get(THREEGEE_SID, "RouterDeviceID", device))
+    if (tonumber(routerDeviceNumber) ~= 0) then
+      threeGeeNotify(device, "Power-Cycling Router")
+      powerCycleDevice(routerDeviceNumber)
+    end
+    ]]
   end
+end
+
+local function powerCycleRouter(switchDevice)
+  luup.log("ThreeGee1: running powerCycleRouter()")
+  luup.log("ThreeGee1: turning off device:"..switchDevice)
+  luup.call_timer("powerUp", 1, "30", "", "switchDevice")
+end
+
+local function powerup(deviceNumber)
+  luup.log("ThreeGee1: running powerup()")
+  luup.log("ThreeGee1: turning on device:"..deviceNumber)
+  threeGeeNotify(device, "Restoring Power to device:"..deviceNumber)
 end
 
 function getPingState(device)
