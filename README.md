@@ -72,7 +72,7 @@ The Control Panel appears with the default (preferred) settings showing as:
 
 ![ControlPanel](https://github.com/BulldogLowell/VeraSerial3gBridge/blob/master/images/VeraControlPanel.png)
 
-You can set the 
+You can set the
   * **GateWay Timeout:** The time (minutes) that the gateway will send an alert if Vera stops communicating.
   * **Ping Frequency:** The time (seconds) that the Vera will send a ping to the gateway and to the internet.  Vera looks for a response from both the gateway and the internet.
   * **Ping Timeout:** The time (seconds) that Vera, in the absense of a return ping from the Gateway will display as "Tripped".  It is also the timeout for returning a successful ping from the internet
@@ -87,7 +87,9 @@ Send a message by inputting text (32 char max) into the appropriate text box and
   * Messages take several seconds to send as the Electron is awoken from sleep and re-connects to the Mobile Network.
   * Messages will buffer (up to 10) so 3G messages should be limited to the most important if the internet is disconnected.  
   * You can determine the state of the IP Ping checking the **InternetPing** variable **ServiceID:** *urn:konektedplay-com:serviceId:ThreeGee1*, "0" is success "1" is failed.
-  * Device will report **Tripped** variable **ServiceID:** *urn:micasaverde-com:serviceId:SecuritySensor1* "1" = Tripped, "0" = Not Tripped.  You can have Vera send a message that the Gateway is down (in this case, gateway stopped functioning but Internet is still connected).
+  * Device will report **Tripped** if communication with the Gateway has failed.  Use the variable **ServiceID:** *urn:micasaverde-com:serviceId:SecuritySensor1* "1" = Tripped, "0" = Not Tripped.  You can have Vera send a message that the Gateway is down (in this case, gateway stopped functioning but Internet is still connected).
+  * When power-cycling your router's outlet/switch, the router will be shut down for PingInterval seconds.  It is a good idea to keep your PingInterval at the default 30 seconds or longer.
+  * Vera will automatically powerUp your router... in the case you have turned it off.  Think of it as an Auto-Power-Restore if you want to manually power-cycle your router from within the network.
   ***
 ## Coming Soon:
   * Automatic Power Cycling of Vera (relay control) if inactive for a defined period.

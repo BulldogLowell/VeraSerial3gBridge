@@ -9,6 +9,7 @@ local GATEWAY_TIMEOUT = 3
 local PING_INTERVAL = 30
 local PING_TIMEOUT = 120
 local IP_ADDRESS = "google.com"
+local POWER_CYCLE_INTERVAL = 60 * 4
 
 local pingArray = {}
 local MAX_ARRAY_SIZE = 60
@@ -95,6 +96,7 @@ function initializeVariables(device)
   return true
 end
 
+-- gateway detection
 function pingGateway(device)
   luup.log("ThreeGee1: running pingGateway()")
   luup.io.write("PING:-1", tonumber(device))
@@ -140,56 +142,60 @@ end
 function ipCheckAndNotify(device)
   assert(device ~= nil)
   luup.log("ThreeGee1: running ipCheckAndNotify()")
+
+  -- assert that the router's power is "ON"  this allows for 'manual' reset of router with the Vera UI
+  local routerID = luup.variable_get(THREEGEE_SID, "RouterDeviceID", device)
+  if (routerID ~= "0") then
+    local currentSwitchStatus = luup.variable_get(SWITCHPOWER_SID, "Status", tonumber(routerID))
+    if (currentSwitchStatus == "0") then
+      threeGeeNotify(device, "Restoring Router Power")
+      luup.call_action(SWITCHPOWER_SID, "SetTarget", {newTargetValue="1"}, tonumber(routerID))
+      luup.log("ThreeGee1: Restoring Router Power"..routerID)
+    end
+  else
+    luup.log("ThreeGee1: No Router Device Number Selected")
+  end
+
   local currentState = getPingState(device)
   luup.log("ThreeGee1: currentPingState: "..currentState)
 
+  -- pingArray ring stores the past ping states
   table.remove(pingArray, table.getn(pingArray))
   table.insert(pingArray, 1, currentState)
-
+--debug only
   for i = 1, table.getn(pingArray) do
     luup.log("ThreeGee1: Ping Array Value:"..tostring(i).."->"..(pingArray[i]))
   end
 
+  -- look for state change
   local savedState, stateChangeTime = luup.variable_get("urn:konektedplay-com:serviceId:ThreeGee1", "InternetPing", device)
   if (currentState ~= tostring(savedState)) then
     if currentState == "0" then  -- immediately indicate connected, zero is success
       luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "InternetPing", tonumber(currentState), tonumber(device))
       luup.log("ThreeGee1: IP Sensor State Change, new state = CONNECTED")
-      threeGeeNotify(device, "INTERNET CXN RESTORED")
+      threeGeeNotify(device, "Internet Restored")
       internetLostRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
     else
       if getTrailingState() == "1" then  -- wait PingTimeout to indicate not connected
         luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "InternetPing", tonumber(currentState), tonumber(device))
-        luup.log("ThreeGee1: IP Sensor State Change, new state = LOST")
-        threeGeeNotify(device, "INTERNET CXN LOST")
+        luup.log("ThreeGee1: IP Sensor State Change, new state = NOT CONNECTED")
+        threeGeeNotify(device, "Internet Not Connected")
         lastIpReminder = os.time()
       end
     end
   end
-  if (currentState == "1") and (internetLostRetries ~= 0) and (os.time() - lastIpReminderTime > 1800) then
+
+  -- Attempt to reset router if persistent loss of internet
+  if ((currentState == "1") and (internetLostRetries ~= 0) and (os.time() - lastIpReminderTime > POWER_CYCLE_INTERVAL)) then
     internetLostRetries = tonumber(internetLostRetries) - 1
     lastIpReminderTime = os.time()
-    threeGeeNotify(device, "INTERNET CXN LOST")
-    --[[
-    local routerDeviceNumber = tonumber(luup.variable_get(THREEGEE_SID, "RouterDeviceID", device))
-    if (tonumber(routerDeviceNumber) ~= 0) then
-      threeGeeNotify(device, "Power-Cycling Router")
-      powerCycleDevice(routerDeviceNumber)
+    luup.log("ThreeGee1: Initiating Power Cycle")
+    local message = "Power-Cycling Router~"..internetLostRetries
+    threeGeeNotify(device, message)
+    if (routerID ~= "0") then
+      luup.call_action(SWITCHPOWER_SID, "SetTarget", {newTargetValue="0"}, tonumber(routerID))
     end
-    ]]
   end
-end
-
-local function powerCycleRouter(switchDevice)
-  luup.log("ThreeGee1: running powerCycleRouter()")
-  luup.log("ThreeGee1: turning off device:"..switchDevice)
-  luup.call_timer("powerUp", 1, "30", "", "switchDevice")
-end
-
-local function powerup(deviceNumber)
-  luup.log("ThreeGee1: running powerup()")
-  luup.log("ThreeGee1: turning on device:"..deviceNumber)
-  threeGeeNotify(device, "Restoring Power to device:"..deviceNumber)
 end
 
 function getPingState(device)
