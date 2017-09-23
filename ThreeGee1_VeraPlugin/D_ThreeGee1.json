@@ -175,7 +175,7 @@
                "ID":"Message",
                "Display":{
                   "Top":100,
-                  "Left":190,
+                  "Left":205,
                   "Width":80
                }
             },
@@ -213,7 +213,7 @@
                "ControlType":"label",
                "Label":{
                   "lang_tag":"label_ping_set",
-                  "text":"Gateway Timeout:"
+                  "text":"Gateway Timeout (min):"
                },
                "Display":{
                   "Top":125,
@@ -228,7 +228,7 @@
                "ID":"GatewayTimeout",
                "Display":{
                   "Top":125,
-                  "Left":190,
+                  "Left":205,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"GatewayTimeout"
@@ -268,7 +268,7 @@
                "ControlType":"label",
                "Label":{
                   "lang_tag":"label_freq_set",
-                  "text":"Ping Frequency:"
+                  "text":"Ping Frequency (sec):"
                },
                "Display":{
                   "Top":150,
@@ -283,7 +283,7 @@
                "ID":"PingFrequency",
                "Display":{
                   "Top":150,
-                  "Left":190,
+                  "Left":205,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"PingFrequency"
@@ -323,7 +323,7 @@
                "ControlType":"label",
                "Label":{
                   "lang_tag":"label_pinfreq_set",
-                  "text":"Ping Timeout:"
+                  "text":"Ping Timeout (sec):"
                },
                "Display":{
                   "Top":175,
@@ -338,7 +338,7 @@
                "ID":"PingTimeout",
                "Display":{
                   "Top":175,
-                  "Left":190,
+                  "Left":205,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"PingTimeout"
@@ -393,7 +393,7 @@
                "ID":"IPAddress",
                "Display":{
                   "Top":200,
-                  "Left":190,
+                  "Left":205,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"IPAddress"
@@ -448,7 +448,7 @@
                "ID":"IpRepeatTries",
                "Display":{
                   "Top":225,
-                  "Left":190,
+                  "Left":205,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"IpRepeatTries"
@@ -503,7 +503,7 @@
                "ID":"RouterDeviceID",
                "Display":{
                   "Top":250,
-                  "Left":190,
+                  "Left":205,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"RouterDeviceID"
