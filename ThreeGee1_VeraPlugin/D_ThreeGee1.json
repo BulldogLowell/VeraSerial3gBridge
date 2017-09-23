@@ -175,7 +175,7 @@
                "ID":"Message",
                "Display":{
                   "Top":100,
-                  "Left":165,
+                  "Left":190,
                   "Width":80
                }
             },
@@ -189,7 +189,7 @@
                },
                "Display":{
                   "Top":100,
-                  "Left":270,
+                  "Left":300,
                   "Width":50
                },
                "Command":{
@@ -228,7 +228,7 @@
                "ID":"GatewayTimeout",
                "Display":{
                   "Top":125,
-                  "Left":165,
+                  "Left":190,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"GatewayTimeout"
@@ -244,7 +244,7 @@
                },
                "Display":{
                   "Top":125,
-                  "Left":270,
+                  "Left":300,
                   "Width":50
                },
                "Command":{
@@ -283,7 +283,7 @@
                "ID":"PingFrequency",
                "Display":{
                   "Top":150,
-                  "Left":165,
+                  "Left":190,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"PingFrequency"
@@ -299,7 +299,7 @@
                },
                "Display":{
                   "Top":150,
-                  "Left":270,
+                  "Left":300,
                   "Width":50
                },
                "Command":{
@@ -338,7 +338,7 @@
                "ID":"PingTimeout",
                "Display":{
                   "Top":175,
-                  "Left":165,
+                  "Left":190,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"PingTimeout"
@@ -354,7 +354,7 @@
                },
                "Display":{
                   "Top":175,
-                  "Left":270,
+                  "Left":300,
                   "Width":50
                },
                "Command":{
@@ -393,7 +393,7 @@
                "ID":"IPAddress",
                "Display":{
                   "Top":200,
-                  "Left":165,
+                  "Left":190,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"IPAddress"
@@ -409,7 +409,7 @@
                },
                "Display":{
                   "Top":200,
-                  "Left":270,
+                  "Left":300,
                   "Width":50
                },
                "Command":{
@@ -433,7 +433,7 @@
                "ControlType":"label",
                "Label":{
                   "lang_tag":"label_ip_repeat",
-                  "text":"IP Notify Retries:"
+                  "text":"Router Restart Attempts:"
                },
                "Display":{
                   "Top":225,
@@ -448,7 +448,7 @@
                "ID":"IpRepeatTries",
                "Display":{
                   "Top":225,
-                  "Left":165,
+                  "Left":190,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"IpRepeatTries"
@@ -464,7 +464,7 @@
                },
                "Display":{
                   "Top":225,
-                  "Left":270,
+                  "Left":300,
                   "Width":50
                },
                "Command":{
@@ -503,7 +503,7 @@
                "ID":"RouterDeviceID",
                "Display":{
                   "Top":250,
-                  "Left":165,
+                  "Left":190,
                   "Width":80,
                   "Service":"urn:konektedplay-com:serviceId:ThreeGee1",
                   "Variable":"RouterDeviceID"
@@ -519,7 +519,7 @@
                },
                "Display":{
                   "Top":250,
-                  "Left":270,
+                  "Left":300,
                   "Width":50
                },
                "Command":{
