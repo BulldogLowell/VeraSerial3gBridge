@@ -9,7 +9,7 @@ local GATEWAY_TIMEOUT = 3
 local PING_INTERVAL = 30
 local PING_TIMEOUT = 120
 local IP_ADDRESS = "google.com"
-local POWER_CYCLE_INTERVAL = 60 * 15 -- minutes between power cycles
+local POWER_CYCLE_INTERVAL = 900 -- 15 minutes between power cycles
 
 local pingArray = {}
 local MAX_ARRAY_SIZE = 60
@@ -142,10 +142,11 @@ end
 function ipCheckAndNotify(device)
   assert(device ~= nil)
   luup.log("ThreeGee1: running ipCheckAndNotify()")
+  local routerID = luup.variable_get(THREEGEE_SID, "RouterDeviceID", device)
 
   -- assert that the router's power is "ON"  this allows for 'manual' reset of router with the Vera UI
-  local routerID = luup.variable_get(THREEGEE_SID, "RouterDeviceID", device)
-  if (routerID ~= "0") then
+
+  if tonumber(routerID) ~= 0 then
     local currentSwitchStatus = luup.variable_get(SWITCHPOWER_SID, "Status", tonumber(routerID))
     if (currentSwitchStatus == "0") then
       threeGeeNotify(device, "Restoring Router Power")
@@ -156,13 +157,13 @@ function ipCheckAndNotify(device)
     luup.log("ThreeGee1: No Router Device Number Selected")
   end
 
+
   local currentState = getPingState(device)
   luup.log("ThreeGee1: currentPingState: "..currentState)
 
-  -- pingArray ring stores the past ping states
   table.remove(pingArray, table.getn(pingArray))
   table.insert(pingArray, 1, currentState)
---debug only
+
   for i = 1, table.getn(pingArray) do
     luup.log("ThreeGee1: Ping Array Value:"..tostring(i).."->"..(pingArray[i]))
   end
@@ -181,20 +182,24 @@ function ipCheckAndNotify(device)
         luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "InternetPing", tonumber(currentState), tonumber(device))
         luup.log("ThreeGee1: IP Sensor State Change, new state = NOT CONNECTED")
         threeGeeNotify(device, "Internet Not Connected")
-        lastIpReminder = os.time()
+        lastIpReminderTime = os.time()
       end
     end
   end
 
   -- Attempt to reset router if persistent loss of internet
-  if ((tostring(savedState) == "1") and (internetLostRetries > 0) and (os.time() - lastIpReminderTime > POWER_CYCLE_INTERVAL)) then
-    internetLostRetries = internetLostRetries - 1
-    lastIpReminderTime = os.time()
-    luup.log("ThreeGee1: Initiating Power Cycle")
-    local message = "Power-Cycling Router-"..internetLostRetries
-    threeGeeNotify(device, message)
-    if (routerID ~= "0") then
-      luup.call_action(SWITCHPOWER_SID, "SetTarget", {newTargetValue="0"}, tonumber(routerID))
+  if tostring(savedState) == "1" then
+    if tonumber(routerID) ~= 0 then
+      if os.time() - lastIpReminderTime >= POWER_CYCLE_INTERVAL then
+        if internetLostRetries > 0 then
+          internetLostRetries = internetLostRetries - 1
+          lastIpReminderTime = os.time()
+          luup.log("ThreeGee1: Initiating Power Cycle")
+          local mssg = "Power-Cycling Router-"..internetLostRetries
+          threeGeeNotify(device, mssg)
+          luup.call_action(SWITCHPOWER_SID, "SetTarget", {newTargetValue="0"}, tonumber(routerID))
+        end
+      end
     end
   end
 
@@ -205,7 +210,7 @@ function getPingState(device)
   luup.log("ThreeGee1: running getPingState()")
   local ipAddress = luup.variable_get("urn:konektedplay-com:serviceId:ThreeGee1", "IPAddress", device)
   luup.log("ThreeGee1: Pinging IP address: "..ipAddress)
-  local success = os.execute("ping -c 1 " .. ipAddress)
+  local success = os.execute("ping -c 1 -W 1 " .. ipAddress)
 	if (success == 0) then
     luup.log("ThreeGee1: IP Ping Success...")
     return "0"
@@ -218,6 +223,7 @@ function setPingFrequency(device, newFrequency)
   assert(device ~= nil)
   luup.log("ThreeGee1: Setting Ping Frequency with interval:"..newFrequency)
   luup.variable_set(THREEGEE_SID, "PingFrequency", newFrequency, device)
+  luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "Ping Frequency:"..newFrequency.."seconds", device)
   local timeout = luup.variable_get(THREEGEE_SID, "PingTimeout", device)
   local pingCount = math.floor(timeout / newFrequency) or 1
   if pingCount > MAX_ARRAY_SIZE then
@@ -238,6 +244,7 @@ function setPingTimeout(device, newTimeout)
   assert(device ~= nil)
   luup.log("ThreeGee1: Setting Ping Timeout with interval:"..newTimeout)
   luup.variable_set(THREEGEE_SID, "PingTimeout", newTimeout, device)
+  luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "Ping Timeout:"..newTimeout.."seconds", device)
   local freq = luup.variable_get(THREEGEE_SID, "PingFrequency", device)
   local pingCount = math.floor(newTimeout / freq) or 1
   if pingCount > MAX_ARRAY_SIZE then
@@ -258,6 +265,7 @@ function setIpRepeatTries(device, tries)
   assert(device ~= nil)
   luup.log("ThreeGee1: Setting IP Repeat Tries to:"..tries)
   luup.variable_set(THREEGEE_SID, "IpRepeatTries", tries, device)
+  luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "Restart Attempts:"..tries.." tries", device)
   internetLostRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
 end
 
@@ -265,11 +273,13 @@ function setRouterDeviceID(device, routerID)
   assert(device ~= nil)
   luup.log("ThreeGee1: Setting Router Target Device to: "..routerID)
   --if (luup.variable.get(SWITCHPOWER_SID, "Target", routerID) == nil) then
-  if (luup.device_supports_service(SWITCHPOWER_SID, routerID)) then
+  if luup.device_supports_service(SWITCHPOWER_SID, routerID) or tonumber(routerID) == 0 then
     luup.log("ThreeGee1: Setting RouterDeviceID to:"..routerID)
     luup.variable_set(THREEGEE_SID, "RouterDeviceID", tonumber(routerID), device)
+    luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "Router Device:"..routerID, device)
   else
     luup.log("ThreeGee1: Device"..routerID.."is not a Switch")
+    luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "Device not a switch", device)
   end
 end
 
@@ -298,6 +308,7 @@ function setIPAddress(device, newIP)
   assert(device ~= nil)
   luup.log("ThreeGee1: Setting IP Address:"..newIP)
   luup.variable_set(THREEGEE_SID, "IPAddress", newIP, device)
+  luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "IP/Domain:"..newIP, device)
 end
 
 
