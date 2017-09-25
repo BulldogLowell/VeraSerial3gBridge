@@ -9,13 +9,13 @@ local GATEWAY_TIMEOUT = 3
 local PING_INTERVAL = 30
 local PING_TIMEOUT = 120
 local IP_ADDRESS = "google.com"
-local POWER_CYCLE_INTERVAL = 900 -- 15 minutes between power cycles
+local POWER_CYCLE_INTERVAL = 600 -- 15 minutes between power cycles
 
 local pingArray = {}
 local MAX_ARRAY_SIZE = 60
 
 local internetLostRetries = 0
-local lastIpReminderTime = os.time()
+local lastIpReminderTime = 0
 
 function initializeVariables(device)
   assert(device ~= nil)
@@ -136,6 +136,7 @@ function pingGateway(device)
       luup.variable_set("urn:micasaverde-com:serviceId:SecuritySensor1", "Tripped", 0, tonumber(device))
     end
   end
+  return true
 end
 
 -- Notifications for Loss of Internet
@@ -176,22 +177,23 @@ function ipCheckAndNotify(device)
       luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "InternetPing", tonumber(currentState), tonumber(device))
       luup.log("ThreeGee1: IP Sensor State Change, new state = CONNECTED")
       threeGeeNotify(device, "Internet Restored")
-      internetLostRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
+      internetLostRetries = tonumber(luup.variable_get(THREEGEE_SID, "IpRepeatTries", device))
     else
       if getTrailingState() == "1" then  -- wait PingTimeout to indicate not connected
         luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "InternetPing", tonumber(currentState), tonumber(device))
         luup.log("ThreeGee1: IP Sensor State Change, new state = NOT CONNECTED")
-        threeGeeNotify(device, "Internet Not Connected")
         lastIpReminderTime = os.time()
+        threeGeeNotify(device, "Internet Not Connected"..lastIpReminderTime)
       end
     end
   end
 
   -- Attempt to reset router if persistent loss of internet
+
   if tostring(savedState) == "1" then
     if tonumber(routerID) ~= 0 then
-      if os.time() - lastIpReminderTime >= POWER_CYCLE_INTERVAL then
-        if internetLostRetries > 0 then
+      if tonumber(internetLostRetries) > 0 then
+        if  os.time() - lastIpReminderTime >= POWER_CYCLE_INTERVAL then
           internetLostRetries = internetLostRetries - 1
           lastIpReminderTime = os.time()
           luup.log("ThreeGee1: Initiating Power Cycle")
@@ -202,7 +204,7 @@ function ipCheckAndNotify(device)
       end
     end
   end
-
+  return true
 end
 
 function getPingState(device)
