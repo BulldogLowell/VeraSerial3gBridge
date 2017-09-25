@@ -196,22 +196,6 @@ function setPingFrequency(device, newFrequency)
   luup.log("ThreeGee1: Setting Ping Frequency with interval:"..newFrequency)
   luup.variable_set(THREEGEE_SID, "PingFrequency", newFrequency, device)
   luup.variable_set(THREEGEE_SID, "Received", "Ping Frequency:"..newFrequency.."seconds", device)
-  --[[
-  local timeout = luup.variable_get(THREEGEE_SID, "PingTimeout", device)
-  local pingCount = math.floor(timeout / newFrequency) or 1
-  if pingCount > MAX_ARRAY_SIZE then
-    pingCount = MAX_ARRAY_SIZE
-  end
-  luup.log("ThreeGee1: newPingCount:"..pingCount)
-  for i = 1, getMax(pingCount, table.getn(pingArray)) do
-    if i <= pingCount then
-      pingArray[i] = "0"
-    else
-      pingArray[i] = nil
-    end
-  end
-  luup.log("ThreeGee1: newPingArrayLength: "..table.getn(pingArray))
-  ]]
 end
 
 function setPingTimeout(device, newTimeout)
@@ -219,22 +203,6 @@ function setPingTimeout(device, newTimeout)
   luup.log("ThreeGee1: Setting Ping Timeout with interval:"..newTimeout)
   luup.variable_set(THREEGEE_SID, "PingTimeout", newTimeout, device)
   luup.variable_set(THREEGEE_SID, "Received", "Ping Timeout:"..newTimeout.."seconds", device)
-  --[[
-  local freq = luup.variable_get(THREEGEE_SID, "PingFrequency", device)
-  local pingCount = math.floor(newTimeout / freq) or 1
-  if pingCount > MAX_ARRAY_SIZE then
-    pingCount = MAX_ARRAY_SIZE
-  end
-  luup.log("ThreeGee1: newPingCount:"..pingCount)
-  for i = 1, getMax(pingCount, table.getn(pingArray)) do
-    if i <= pingCount then
-      pingArray[i] = "0"
-    else
-      pingArray[i] = nil
-    end
-  end
-  luup.log("ThreeGee1: newPingArrayLength: "..table.getn(pingArray))
-  ]]
 end
 
 function setIpRepeatTries(device, tries)
@@ -258,28 +226,6 @@ function setRouterDeviceID(device, routerID)
     luup.variable_set(THREEGEE_SID, "Received", "Device not a switch", device)
   end
 end
-
---[[
-function getMax(pingCount, arraySize)
-  if arraySize > pingCount then
-    return arraySize;
-  else
-    return pingCount
-  end
-end
-
-function getTrailingState()
-  luup.log("ThreeGee1: running getTrailingState()")
-  for i = 1, (table.getn(pingArray)) do
-    if pingArray[i] == "0" then
-      luup.log("ThreeGee1: trailingState = 0")
-      return "0";
-    end
-  end
-  luup.log("ThreeGee1: trailingState = 1")
-  return "1"
-end
-]]
 
 function setIPAddress(device, newIP)
   assert(device ~= nil)
