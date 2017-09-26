@@ -11,111 +11,107 @@ local PING_TIMEOUT = 120
 local IP_ADDRESS = "google.com"
 local POWER_CYCLE_INTERVAL = 900 -- 15 minutes between power cycles
 
-local internetLostRetries = 0
+local restartRetries = 0
 local lastIpReminderTime = 0
 
 function initializeVariables(device)
   assert(device ~= nil)
-  luup.log("ThreeGee1: running initializeVariables")
-  luup.log("ThreeGee1: initializing...")
+  logToVera("running initializeVariables")
+  logToVera("initializing...")
 
   if (luup.variable_get(SECURITY_SENSOR_SID, "Tripped", device) == nil) then
-    luup.log("ThreeGee1: initializing Tripped")
+    logToVera("initializing Tripped")
     luup.variable_set(SECURITY_SENSOR_SID, "Tripped", 0, device)
   end
 
   if (luup.variable_get(THREEGEE_SID, "LastUpdate", device) == nil) then
-    luup.log("ThreeGee1: initializing LastUpdate")
+    logToVera("initializing LastUpdate")
     luup.variable_set(THREEGEE_SID, "LastUpdate", os.date("%c"), device)
   end
 
   if (luup.variable_get(SECURITY_SENSOR_SID, "Armed", device) == nil) then
-    luup.log("ThreeGee1: initializing Armed")
+    logToVera("initializing Armed")
     luup.variable_set(SECURITY_SENSOR_SID, "Armed", 0, device)
   end
 
   if (luup.variable_get(SECURITY_SENSOR_SID, "ArmedTripped", device) == nil) then
-    luup.log("ThreeGee1: initializing ArmedTripped")
+    logToVera("initializing ArmedTripped")
     luup.variable_set(SECURITY_SENSOR_SID, "ArmedTripped", 0, device)
   end
 
   if (luup.variable_get(THREEGEE_SID, "GatewayTimeout", device) == nil) then
-    luup.log("ThreeGee1: initializing GatewayTimeout")
+    logToVera("initializing GatewayTimeout")
     luup.variable_set(THREEGEE_SID, "GatewayTimeout", GATEWAY_TIMEOUT, device)
   end
 
   if (luup.variable_get(THREEGEE_SID, "PingFrequency", device) == nil) then
-    luup.log("ThreeGee1: initializing PingFrequency")
+    logToVera("initializing PingFrequency")
     luup.variable_set(THREEGEE_SID, "PingFrequency", PING_INTERVAL, device)
   end
 
   if (luup.variable_get(THREEGEE_SID, "PingTimeout", device) == nil) then
-    luup.log("ThreeGee1: initializing PingTimeout")
+    logToVera("initializing PingTimeout")
     luup.variable_set(THREEGEE_SID, "PingTimeout", PING_TIMEOUT, device)
   end
 
   if (luup.variable_get(THREEGEE_SID, "IPAddress", device) == nil) then
-    luup.log("ThreeGee1: initializing IPAddress")
+    logToVera("initializing IPAddress")
     luup.variable_set(THREEGEE_SID, "IPAddress", IP_ADDRESS, device)
   end
 
   if (luup.variable_get(THREEGEE_SID, "InternetPing", device) == nil) then
-    luup.log("ThreeGee1: initializing InternetPing")
+    logToVera("initializing InternetPing")
     luup.variable_set(THREEGEE_SID, "InternetPing", 0, device)
   end
 
   if (luup.variable_get(THREEGEE_SID, "IpRepeatTries", device) == nil) then
-    luup.log("ThreeGee1: initializing IpRepeatTries")
+    logToVera("initializing IpRepeatTries")
     luup.variable_set(THREEGEE_SID, "IpRepeatTries", 0, device)
   end
 
   if (luup.variable_get(THREEGEE_SID, "RouterDeviceID", device) == nil) then
-    luup.log("ThreeGee1: initializing RouterDeviceID")
+    logToVera("initializing RouterDeviceID")
     luup.variable_set(THREEGEE_SID, "RouterDeviceID", 0, device)
   end
 
-  internetLostRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
-  luup.log("ThreeGee1: completed initializeVariables")
+  restartRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
+  logToVera("completed initializeVariables")
   return true
 end
 
 -- gateway detection
 function pingGateway(device)
-  luup.log("ThreeGee1: running pingGateway()")
+  logToVera("running pingGateway()")
   luup.io.write("PING:-1", tonumber(device))
-  luup.log("ThreeGee1: getting LastUpdate timestamp")
+  logToVera("getting LastUpdate timestamp")
   local value, timestamp = luup.variable_get(THREEGEE_SID, "LastUpdate", tonumber(device))
   if not timestamp then
-    luup.log("ThreeGee1: error timestamp")
+    logToVera("error timestamp")
   else
-    luup.log("ThreeGee1: timestamp: "..timestamp)
+    logToVera("timestamp: "..timestamp)
   end
-  luup.log("ThreeGee1: getting current tripped state")
+  logToVera("getting current tripped state")
   local currentTrippedState = luup.variable_get(SECURITY_SENSOR_SID, "Tripped", tonumber(device))
   if not currentTrippedState then
-    luup.log("ThreeGee1: error currentTrippedState")
+    logToVera("error currentTrippedState")
   end
-  luup.log("ThreeGee1: getting current PingTimeout")
+  logToVera("getting current PingTimeout")
   local pingTimeout = luup.variable_get(THREEGEE_SID, "PingTimeout", tonumber(device))
   if not pingTimeout then
-    luup.log("ThreeGee1: error pingTimeout")
+    logToVera("error pingTimeout")
   else
-    luup.log("ThreeGee1: pingTimeout: "..tonumber(pingTimeout))
+    logToVera("pingTimeout: "..tonumber(pingTimeout))
   end
-  luup.log("ThreeGee1: checking...")
-  luup.log("ThreeGee1: os.time:"..os.time())
-  luup.log("ThreeGee1: timestamp:"..tonumber(timestamp))
-  luup.log("ThreeGee1: pingTimeout:"..tonumber(pingTimeout))
   if (os.time() - timestamp > tonumber(pingTimeout)) then
-    luup.log("ThreeGee1:  Gateway Sensor Is Tripped")
+    logToVera("Gateway Sensor Is Tripped")
     if(currentTrippedState == "0") then
-      luup.log("ThreeGee1: Setting to Tripped")
+      logToVera("Setting to Tripped")
       luup.variable_set(SECURITY_SENSOR_SID, "Tripped", 1, tonumber(device))
     end
   else
-    luup.log("ThreeGee1: Gateway Sensor Is Not Tripped")
+    logToVera("Gateway Sensor Is Not Tripped")
     if(currentTrippedState == "1") then
-      luup.log("ThreeGee1: setting to not tripped")
+      logToVera("setting to not tripped")
       luup.variable_set(SECURITY_SENSOR_SID, "Tripped", 0, tonumber(device))
     end
   end
@@ -124,112 +120,110 @@ end
 -- Notifications for Loss of Internet
 function ipCheckAndNotify(device)
   assert(device ~= nil)
-  luup.log("ThreeGee1: running ipCheckAndNotify()")
+  logToVera("running ipCheckAndNotify()")
   local routerID = luup.variable_get(THREEGEE_SID, "RouterDeviceID", device)
   local savedState, stateChangeTime = luup.variable_get(THREEGEE_SID, "InternetPing", device)
   local currentState = getPingState(device)
-  luup.log("ThreeGee1: currentPingState: "..currentState)
+  logToVera("currentPingState: "..currentState)
 
   -- assert that the router's power is "ON"  this allows for 'manual' reset of router with the Vera UI
   if tonumber(routerID) ~= 0 then
     local currentSwitchStatus = luup.variable_get(SWITCHPOWER_SID, "Status", tonumber(routerID))
     if (currentSwitchStatus == "0") then
       luup.call_action(SWITCHPOWER_SID, "SetTarget", {newTargetValue="1"}, tonumber(routerID))
-      luup.log("ThreeGee1: Restoring Router Power"..routerID)
+      logToVera("Restoring Router Power"..routerID)
     end
   else
-    luup.log("ThreeGee1: No Router Device Number Selected")
+    logToVera("No Router Device Number Selected")
   end
 
   -- look for state change
   if (currentState ~= tostring(savedState)) then
     if currentState == "0" then  -- immediately indicate connected, zero is success
       luup.variable_set(THREEGEE_SID, "InternetPing", currentState, tonumber(device))
-      luup.log("ThreeGee1: IP Sensor State Change, new state = CONNECTED")
+      logToVera("IP Sensor State Change, new state = CONNECTED")
       threeGeeNotify(device, "Internet Restored")
-      internetLostRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", tonumber(device))
+      restartRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", tonumber(device))
     else  -- or wait PingTimeout to switch to Not Connected
       local timeout = luup.variable_get(THREEGEE_SID, "PingTimeout", device)
       if (os.time() - stateChangeTime) >= tonumber(timeout) then
         luup.variable_set(THREEGEE_SID, "InternetPing", currentState, tonumber(device))
-        luup.log("ThreeGee1: IP Sensor State Change, new state = NOT CONNECTED")
+        logToVera("IP Sensor State Change, new state = NOT CONNECTED")
         threeGeeNotify(device, "Internet Not Connected")
         lastIpReminderTime = os.time()
       end
     end
-  end
-
-  -- Attempt to reset router if persistent loss of internet
-  if tostring(savedState) == "1" then
-    if tonumber(routerID) ~= 0 then
-      if tonumber(internetLostRetries) > 0 then
-        if  os.time() - lastIpReminderTime >= POWER_CYCLE_INTERVAL then
-          internetLostRetries = internetLostRetries - 1
-          lastIpReminderTime = os.time()
-          luup.log("ThreeGee1: Initiating Power Cycle")
-          local mssg = "Power-Cycling Router-"..internetLostRetries
-          threeGeeNotify(device, mssg)
-          luup.call_action(SWITCHPOWER_SID, "SetTarget", {newTargetValue="0"}, tonumber(routerID))
+  else -- Attempt to reset router if persistent loss of internet
+    if tostring(savedState) == "1" then
+      if tonumber(routerID) ~= 0 then
+        if tonumber(restartRetries) > 0 then
+          if  os.time() - lastIpReminderTime >= POWER_CYCLE_INTERVAL then
+            restartRetries = restartRetries - 1
+            lastIpReminderTime = os.time()
+            logToVera("Initiating Power Cycle")
+            local mssg = "Power-Cycling Router-"..restartRetries
+            threeGeeNotify(device, mssg)
+            luup.call_action(SWITCHPOWER_SID, "SetTarget", {newTargetValue="0"}, tonumber(routerID))
+          end
         end
       end
     end
   end
-  --
 end
 
 function getPingState(device)
   assert(device ~= nil)
-  luup.log("ThreeGee1: running getPingState()")
+  logToVera("running getPingState()")
   local ipAddress = luup.variable_get(THREEGEE_SID, "IPAddress", device)
-  luup.log("ThreeGee1: Pinging IP address: "..ipAddress)
+  logToVera("Pinging IP address: "..ipAddress)
   local success = os.execute("ping -c 1 -W 1 " .. ipAddress)
 	if (success == 0) then
-    luup.log("ThreeGee1: IP Ping Success...")
+    logToVera("IP Ping Success...")
     return "0"
   end
-  luup.log("ThreeGee1: IP Ping FAILED!")
+  logToVera("IP Ping FAILED!")
   return "1"
 end
 
 function setPingFrequency(device, newFrequency)
   assert(device ~= nil)
-  luup.log("ThreeGee1: Setting Ping Frequency with interval:"..newFrequency)
+  logToVera("Setting Ping Frequency with interval:"..newFrequency)
   luup.variable_set(THREEGEE_SID, "PingFrequency", newFrequency, device)
   luup.variable_set(THREEGEE_SID, "Received", "Ping Frequency:"..newFrequency.."seconds", device)
 end
 
 function setPingTimeout(device, newTimeout)
   assert(device ~= nil)
-  luup.log("ThreeGee1: Setting Ping Timeout with interval:"..newTimeout)
+  logToVera("Setting Ping Timeout with interval:"..newTimeout)
   luup.variable_set(THREEGEE_SID, "PingTimeout", newTimeout, device)
   luup.variable_set(THREEGEE_SID, "Received", "Ping Timeout:"..newTimeout.."seconds", device)
 end
 
 function setIpRepeatTries(device, tries)
   assert(device ~= nil)
-  luup.log("ThreeGee1: Setting IP Repeat Tries to:"..tries)
+  logToVera("Setting IP Repeat Tries to:"..tries)
   luup.variable_set(THREEGEE_SID, "IpRepeatTries", tries, device)
   luup.variable_set(THREEGEE_SID, "Received", "Restart Attempts:"..tries.." tries", device)
-  internetLostRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
+  restartRetries = luup.variable_get(THREEGEE_SID, "IpRepeatTries", device)
 end
 
 function setRouterDeviceID(device, routerID)
   assert(device ~= nil)
-  luup.log("ThreeGee1: Setting Router Target Device to: "..routerID)
+  logToVera("Setting Router Target Device to: "..routerID)
   --if (luup.variable.get(SWITCHPOWER_SID, "Target", routerID) == nil) then
   if luup.device_supports_service(SWITCHPOWER_SID, routerID) or tonumber(routerID) == 0 then
-    luup.log("ThreeGee1: Setting RouterDeviceID to:"..routerID)
+    logToVera("Setting RouterDeviceID to:"..routerID)
     luup.variable_set(THREEGEE_SID, "RouterDeviceID", tonumber(routerID), device)
     luup.variable_set(THREEGEE_SID, "Received", "Router Device:"..routerID, device)
   else
-    luup.log("ThreeGee1: Device"..routerID.."is not a Switch")
+    logToVera("Device"..routerID.."is not a Switch")
     luup.variable_set(THREEGEE_SID, "Received", "Device not a switch", device)
   end
 end
 
 function setIPAddress(device, newIP)
   assert(device ~= nil)
-  luup.log("ThreeGee1: Setting IP Address:"..newIP)
+  logToVera("Setting IP Address:"..newIP)
   luup.variable_set(THREEGEE_SID, "IPAddress", newIP, device)
   luup.variable_set(THREEGEE_SID, "Received", "IP/Domain:"..newIP, device)
 end
@@ -237,7 +231,7 @@ end
 
 function setGatewayTimeout(device, newInterval)
   assert(device ~= nil)
-  luup.log("ThreeGee1: Setting Gateway Timeout with interval:"..newInterval)
+  logToVera("Setting Gateway Timeout with interval:"..newInterval)
   luup.io.write("GWTO:"..newInterval);
   luup.variable_set(THREEGEE_SID, "GatewayTimeout", newInterval, device)
 end
@@ -265,10 +259,10 @@ end
 
 function arm(device)
 	assert(device ~= nil)
-    luup.log("ThreeGee1: Arming ThreeGee1 device:"..device)
+    logToVera("Arming ThreeGee1 device:"..device)
     if not isArmed(device) then
     	luup.variable_set(SECURITY_SENSOR_SID, "Armed", "1", device)
-      luup.log("ThreeGee1: Armed ThreeGee1 device")
+      logToVera("Armed ThreeGee1 device")
     	if isTripped(device) then
         luup.variable_set(SECURITY_SENSOR_SID, "ArmedTripped", "1", device)
       end
@@ -277,15 +271,20 @@ end
 
 function disarm(device)
 	assert(device ~= nil)
-	luup.log("ThreeGee1: Disarming ThreeGee1 device:"..device)
+	logToVera("Disarming ThreeGee1 device:"..device)
 	if isArmed(device) then
 
     luup.variable_set(SECURITY_SENSOR_SID, "Armed", "0", device)
-    luup.log("ThreeGee1: Disarmed ThreeGee1 device")
+    logToVera("Disarmed ThreeGee1 device")
   end
   luup.variable_set(SECURITY_SENSOR_SID, "ArmedTripped", "0", device)
 end
 
 function threeGeeNotify(device, message)
   luup.io.write("MSSG:"..message, tonumber(device))
+end
+
+function logToVera(mssg)
+  local message = "ThreeGee1: "..mssg
+  luup.log(message)
 end

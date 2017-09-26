@@ -9,7 +9,7 @@
 	  local MyDevice
 
 		function startup (lul_device)
-			luup.log("ThreeGee1: Bridge Plugin: Loading Library L_ThreeGee1...")
+			luup.log("ThreeGee1: Loading Library L_ThreeGee1...")
 			if (package.path:find ("/etc/cmh-ludl/?.lua;/etc/cmh-lu/?.lua", 1, true) == nil) then
 				package.path = package.path .. ";/etc/cmh-ludl/?.lua;/etc/cmh-lu/?.lua"
 			end
@@ -22,10 +22,10 @@
 				return false
 			end
 			luup.set_failure(false, lul_device)
-			luup.log("ThreeGee1: plugin: library L_ThreeGee1 loaded")
+			MyDevice.logToVera("library L_ThreeGee1 loaded")
 			luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "no message received", lul_device)
 			MyDevice.initializeVariables(lul_device)
-			luup.log("ThreeGee1: start intervalCallback()")
+			MyDevice.logToVera("starting intervalCallback()")
 			intervalCallback(lul_device)
 		end
 
@@ -33,14 +33,14 @@
 		function intervalCallback (lul_device)
 		  MyDevice.pingGateway(tonumber(lul_device))  -- handler for Serial Gateway
 			MyDevice.ipCheckAndNotify(tonumber(lul_device))  -- Notifications for Loss of Internet (Ethernet Ping Sensor)
-			luup.log("ThreeGee1: Restarting intervalCallback")
+			MyDevice.logToVera("Restarting intervalCallback")
 		  local pingFrequency = luup.variable_get("urn:konektedplay-com:serviceId:ThreeGee1", "PingFrequency", tonumber(lul_device))
 			luup.call_timer("intervalCallback", 1, tostring(pingFrequency), "", lul_device)
 		end
 	</functions>
 	<incoming>
 		<lua>
-			luup.log("ThreeGee1: Received: '"..(lul_data or "nil").."'")
+			MyDevice.logToVera("Received: '"..(lul_data or "nil").."'")
 			if(lul_data == "PING:-1") then
 			  luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "Last Ping: "..os.date("%c"), lul_device)
 			else
@@ -57,16 +57,16 @@
 			<run>
 				if (luup.variable_get("urn:micasaverde-com:serviceId:SecuritySensor1", "Armed", lul_device) == "1") then
 					local message = lul_settings.Message or ""
-					luup.log("ThreeGee1: Send: '"..message.."'")
+					MyDevice.logToVera("Send: '"..message.."'")
 					if (message == "") then
 						luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "message was empty", lul_device)
 					elseif (not luup.io.write("MSSG:"..lul_settings.Message)) then
-						luup.log("ThreeGee1: Could not send the message.")
+						MyDevice.logToVera("Could not send the message.")
 						luup.variable_set("urn:konektedplay-com:serviceId:ThreeGee1", "Received", "couldn't send message", lul_device)
 					end
 				else
 					local message = lul_settings.Message or ""
-					luup.log("ThreeGee1: Device not armed, Message:"..message.." not sent")
+					MyDevice.logToVera("Device not armed, Message:"..message.." not sent")
 				end
 			</run>
 		</action>
@@ -74,7 +74,7 @@
     	<serviceId>urn:micasaverde-com:serviceId:SecuritySensor1</serviceId>
       <name>SetArmed</name>
       <run>
-				luup.log("ThreeGee1: Running SetArmed"..lul_settings.newArmedValue)
+				MyDevice.logToVera("Running SetArmed"..lul_settings.newArmedValue)
         local armed = tonumber(lul_settings.newArmedValue or "0")
         if armed ~= 0 then
         	MyDevice.arm(lul_device)
@@ -88,9 +88,9 @@
         <serviceId>urn:konektedplay-com:serviceId:ThreeGee1</serviceId>
         <name>SetGatewayTimeout</name>
         <run>
-            luup.log("ThreeGee1: Running SetGatewayTimeout")
+            MyDevice.logToVera("Running SetGatewayTimeout")
             local newInterval = tonumber(lul_settings.GatewayTimeout or "0")
-            luup.log("ThreeGee1: new interval:"..newInterval)
+            MyDevice.logToVera("new interval:"..newInterval)
             MyDevice.setGatewayTimeout(lul_device, newInterval)
             return true
         </run>
@@ -99,9 +99,9 @@
         <serviceId>urn:konektedplay-com:serviceId:ThreeGee1</serviceId>
         <name>SetPingFrequency</name>
         <run>
-            luup.log("ThreeGee1: Running SetPingFrequency")
+            MyDevice.logToVera("Running SetPingFrequency")
             local newInterval = tonumber(lul_settings.PingFrequency or "0")
-            luup.log("ThreeGee1: Ping interval:"..newInterval)
+            MyDevice.logToVera("Ping interval:"..newInterval)
             MyDevice.setPingFrequency(lul_device, newInterval)
             return true
         </run>
@@ -110,9 +110,9 @@
         <serviceId>urn:konektedplay-com:serviceId:ThreeGee1</serviceId>
         <name>SetPingTimeout</name>
         <run>
-            luup.log("ThreeGee1: Running SetPingTimeout")
+            MyDevice.logToVera("Running SetPingTimeout")
             local newInterval = tonumber(lul_settings.PingTimeout or "0")
-            luup.log("ThreeGee1: Ping timeout:"..newInterval)
+            MyDevice.logToVera("Ping timeout:"..newInterval)
             MyDevice.setPingTimeout(lul_device, newInterval)
             return true
         </run>
@@ -121,9 +121,9 @@
         <serviceId>urn:konektedplay-com:serviceId:ThreeGee1</serviceId>
         <name>SetIPAddress</name>
         <run>
-            luup.log("ThreeGee1: Running SetIPAddress")
+            MyDevice.logToVera("Running SetIPAddress")
             local newIP = lul_settings.IPAddress or "nil"
-            luup.log("ThreeGee1: IP Address:"..newIP)
+            MyDevice.logToVera("IP Address:"..newIP)
             MyDevice.setIPAddress(lul_device, newIP)
             return true
         </run>
@@ -132,9 +132,9 @@
         <serviceId>urn:konektedplay-com:serviceId:ThreeGee1</serviceId>
         <name>SetIpRepeatTries</name>
         <run>
-            luup.log("ThreeGee1: Running SetIpRepeatTries")
+            MyDevice.logToVera("Running SetIpRepeatTries")
             local ipTries = tonumber(lul_settings.IpRepeatTries) or 0
-            luup.log("ThreeGee1: Repeat Tries:"..ipTries)
+            MyDevice.logToVera("Repeat Tries:"..ipTries)
             MyDevice.setIpRepeatTries(lul_device, ipTries)
             return true
         </run>
@@ -143,9 +143,9 @@
         <serviceId>urn:konektedplay-com:serviceId:ThreeGee1</serviceId>
         <name>SetRouterDeviceID</name>
         <run>
-            luup.log("ThreeGee1: Running SetRouterDeviceID")
+            MyDevice.logToVera("Running SetRouterDeviceID")
             local deviceID = tonumber(lul_settings.RouterDeviceID) or 0
-            luup.log("ThreeGee1: Router Device ID:"..deviceID)
+            MyDevice.logToVera("Router Device ID:"..deviceID)
             MyDevice.setRouterDeviceID(lul_device, deviceID)
             return true
         </run>
