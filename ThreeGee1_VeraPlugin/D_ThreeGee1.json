@@ -151,11 +151,11 @@
                }
             },
             {
-               "ControlGroup":2,
+               "ControlGroup":1,
                "ControlType":"line_break"
             },
             {
-               "ControlGroup":"2",
+               "ControlGroup":"1",
                "ControlHeader":"1",
                "ControlType":"label",
                "Label":{
@@ -169,7 +169,7 @@
                }
             },
             {
-               "ControlGroup":"2",
+               "ControlGroup":"1",
                "ControlPair":"1",
                "ControlType":"input",
                "ID":"Message",
@@ -180,7 +180,7 @@
                }
             },
             {
-               "ControlGroup":"2",
+               "ControlGroup":"1",
                "ControlPair":"1",
                "ControlType":"button",
                "Label":{
