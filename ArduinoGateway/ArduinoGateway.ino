@@ -281,7 +281,7 @@ bool sendPendingElectronMessages()
   static uint32_t lastTransmitMillis = 0;
   if (strlen(pendingMessages[0]))
   {
-    if(millis() - lastTransmitMillis > 1000)
+    if(millis() - lastTransmitMillis > 1000)  //why?  let's do the throttling on the Electron!
     {
       ElectronSerial.println(pendingMessages[0]);
       ElectronSerial.flush();

@@ -34,7 +34,7 @@ void setup()
   NanoSerial.begin(57600);
   DebugSerial.begin(115200);
 
-  // uncomment this followig block of code the first time you flash your Electron
+  // uncomment this following block of code the first time you flash your Electron
   // then comment it back out and reflash your device
 
   /*deviceSettings.repeatMins = 2;
